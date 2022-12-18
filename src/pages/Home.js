@@ -11,8 +11,15 @@ import {
   Container,
   Paper,
 } from "@mui/material";
+import {logout} from "../redux/authSlice";
+import {useDispatch} from "react-redux";
 
 export default function Home() {
+  const dispatch = useDispatch();
+
+  const handleLogOut = () => {
+    dispatch(logout());
+  };
   return (
     <Container>
       <TableContainer component={Paper}>
@@ -37,11 +44,9 @@ export default function Home() {
                     color="success"
                     fullWidth
                     variant="contained"
-                    onClick={() => {
-                      console.log("added");
-                    }}
+                    onClick={handleLogOut}
                   >
-                    ADD
+                    sign out
                   </Button>
                 </Box>
               </TableCell>
