@@ -7,7 +7,7 @@ export const useIsLoggedIn = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      setIsLoggedIn(true);
+      setIsLoggedIn(!!user);
     });
   }, []);
 

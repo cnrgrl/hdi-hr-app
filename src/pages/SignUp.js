@@ -1,6 +1,11 @@
 import {Box, Button, TextField, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {changeName, changeEmail, changePassword} from "../redux/authSlice";
+import {
+  changeName,
+  changeEmail,
+  changePassword,
+  register,
+} from "../redux/authSlice";
 
 export default function SignUp() {
   const name = useSelector((state) => state.auth.name);
@@ -21,7 +26,10 @@ export default function SignUp() {
     dispatch(changePassword(e.currentTarget.value));
   };
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(register({name, email, password}));
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -60,7 +68,7 @@ export default function SignUp() {
       <Button
         type="submit"
         variant="contained"
-        disabled={"isLoading"}
+        disabled={false}
         fullWidth
         sx={{mt: 2}}
       >
