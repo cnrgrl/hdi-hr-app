@@ -6,6 +6,7 @@ import {changeEmail, changePassword, logIn} from "../redux/authSlice";
 export default function SignIn() {
   const email = useSelector((state) => state.auth.email);
   const password = useSelector((state) => state.auth.password);
+  const error = useSelector((state) => state.auth.error);
   const isLoading = useSelector((state) => state.auth.isLoading);
   const dispatch = useDispatch();
 
@@ -26,6 +27,9 @@ export default function SignIn() {
     <form onSubmit={handleSubmit}>
       <Typography variant="h5" sx={{textAlign: "center"}}>
         Sign in
+      </Typography>
+      <Typography variant="h5" sx={{textAlign: "center"}}>
+        {error}
       </Typography>
       <TextField
         fullWidth

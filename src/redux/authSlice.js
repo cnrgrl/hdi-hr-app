@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import {auth} from "../config/firebase";
 import {
+  // https://firebase.google.com/docs/auth/web/password-auth
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateCurrentUser,
@@ -11,6 +12,8 @@ const initialState = {
   name: "",
   email: "",
   password: "",
+  isLoading: false,
+  error: null,
 };
 
 export const register = createAsyncThunk(
@@ -53,6 +56,29 @@ const authSlice = createSlice({
     changePassword: (state, action) => {
       state.password = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(register.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(register.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(logIn.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(logIn.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(logIn.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isLoading = false;
+      });
   },
 });
 
