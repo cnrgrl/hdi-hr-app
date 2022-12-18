@@ -1,11 +1,25 @@
 import {Box, Button, TextField, Typography} from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {changeName, changeEmail, changePassword} from "../redux/authSlice";
 
 export default function SignUp() {
-  const handleNameChange = (e) => {};
+  const name = useSelector((state) => state.auth.name);
+  const email = useSelector((state) => state.auth.email);
+  const password = useSelector((state) => state.auth.password);
 
-  const handleEmailChange = (e) => {};
+  const dispatch = useDispatch();
 
-  const handlePasswordChange = (e) => {};
+  const handleNameChange = (e) => {
+    dispatch(changeName(e.currentTarget.value));
+  };
+
+  const handleEmailChange = (e) => {
+    dispatch(changeEmail(e.currentTarget.value));
+  };
+
+  const handlePasswordChange = (e) => {
+    dispatch(changePassword(e.currentTarget.value));
+  };
 
   const handleSubmit = (e) => {};
 
@@ -22,7 +36,7 @@ export default function SignUp() {
         required
         autoComplete="name"
         autoFocus
-        value={"name"}
+        value={name}
         onChange={handleNameChange}
       />
       <TextField
@@ -31,7 +45,7 @@ export default function SignUp() {
         label="Email Address"
         required
         autoComplete="email"
-        value={"email"}
+        value={email}
         onChange={handleEmailChange}
       />
       <TextField
@@ -40,7 +54,7 @@ export default function SignUp() {
         label="Password"
         required
         type="password"
-        value={"password"}
+        value={password}
         onChange={handlePasswordChange}
       />
       <Button
