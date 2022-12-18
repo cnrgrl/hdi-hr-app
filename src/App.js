@@ -1,5 +1,7 @@
+import Router from "./config/router";
+
 function App() {
-  return <div className="App">Hi HDI!</div>;
+  return <Router />;
 }
 
 export default App;
