@@ -11,14 +11,14 @@ import {
   Container,
   Paper,
 } from "@mui/material";
-import {logout} from "../redux/authSlice";
+import {logOut} from "../redux/authSlice";
 import {useDispatch} from "react-redux";
 
 export default function Home() {
   const dispatch = useDispatch();
 
   const handleLogOut = () => {
-    dispatch(logout());
+    dispatch(logOut());
   };
   return (
     <Container>
