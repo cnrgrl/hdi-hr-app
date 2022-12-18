@@ -1,11 +1,12 @@
-import {Box, Button, TextField, Typography} from "@mui/material";
+import {Box, Button, Link, TextField, Typography} from "@mui/material";
 import {useSelector, useDispatch} from "react-redux";
-import {changeEmail, changePassword} from "../redux/authSlice";
+import {Link as RouterLink} from "react-router-dom";
+import {changeEmail, changePassword, logIn} from "../redux/authSlice";
 
 export default function SignIn() {
   const email = useSelector((state) => state.auth.email);
   const password = useSelector((state) => state.auth.password);
-
+  const isLoading = useSelector((state) => state.auth.isLoading);
   const dispatch = useDispatch();
 
   const handleEmailChange = (e) => {
@@ -16,7 +17,10 @@ export default function SignIn() {
     dispatch(changePassword(e.currentTarget.value));
   };
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(logIn({email, password}));
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -45,11 +49,11 @@ export default function SignIn() {
       <Button
         type="submit"
         variant="contained"
-        disabled={"isLoading"}
+        disabled={isLoading}
         fullWidth
         sx={{mt: 2}}
       >
-        Sign in
+        {isLoading ? "Loading ..." : "Sign in"}
       </Button>
 
       <Box
@@ -60,9 +64,12 @@ export default function SignIn() {
           mt: 4,
         }}
       >
-        Forgot Password?
-        <span>Forgot Password?</span>
-        <span>Don't have an account? Sign up</span>
+        <Link component={RouterLink} to="../forgot-password">
+          Forgot Password?
+        </Link>
+        <Link component={RouterLink} to="../sign-up">
+          Don't have an account? Sign up
+        </Link>
       </Box>
     </form>
   );

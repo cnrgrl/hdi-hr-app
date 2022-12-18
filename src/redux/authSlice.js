@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import {auth} from "../config/firebase";
 import {
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateCurrentUser,
   signOut,
@@ -14,24 +15,28 @@ const initialState = {
 
 export const register = createAsyncThunk(
   "auth/register",
-  async ({name, email, password}) => {
+  async ({name, email, password}, {rejectWithValue}) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       await updateCurrentUser(auth, {displayName: name});
     } catch (e) {
-      return console.error(e.code);
+      return rejectWithValue(e.code);
     }
   }
 );
 
-export const login = createAsyncThunk(
+export const logIn = createAsyncThunk(
   "auth/login",
-  async ({email, password}) => {
-    alert("hi");
+  async ({email, password}, {rejectWithValue}) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (e) {
+      return rejectWithValue(e.code);
+    }
   }
 );
 
-export const logout = createAsyncThunk("auth/logout", async () => {
+export const logOut = createAsyncThunk("auth/logout", async () => {
   await signOut(auth);
 });
 
