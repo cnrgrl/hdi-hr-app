@@ -1,4 +1,4 @@
-import {Box, Button, TextField, Link, Typography} from "@mui/material";
+import {Box, Button, Link, TextField, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {Link as RouterLink} from "react-router-dom";
 import {
@@ -12,7 +12,7 @@ export default function SignUp() {
   const name = useSelector((state) => state.auth.name);
   const email = useSelector((state) => state.auth.email);
   const password = useSelector((state) => state.auth.password);
-  const error = useSelector((state) => state.auth.error);
+
   const isLoading = useSelector((state) => state.auth.isLoading);
 
   const dispatch = useDispatch();
@@ -39,11 +39,6 @@ export default function SignUp() {
       <Typography variant="h5" sx={{textAlign: "center"}}>
         Sign up
       </Typography>
-      {error && (
-        <Typography color="error" variant="h5" sx={{textAlign: "center"}}>
-          error
-        </Typography>
-      )}
 
       <TextField
         fullWidth
