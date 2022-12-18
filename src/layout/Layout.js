@@ -6,14 +6,24 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Avatar,
+  Box,
+  DialogActions,
+  Button,
 } from "@mui/material";
-import {User as UserIcon} from "feather-icons-react";
-import {useIsLoggedIn} from "../config/hooks";
+import {useIsLoggedIn, useCurrentUser} from "../config/hooks";
 import {useState} from "react";
+import {User as UserIcon} from "feather-icons-react";
 
 export default function Layout() {
+  const currentUser = useCurrentUser();
+
   const isLoggedIn = useIsLoggedIn();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
 
   if (isLoggedIn === null) return <h1>Loading...</h1>;
   else if (isLoggedIn === false) return <Navigate replace to="/sign-in" />;
@@ -46,6 +56,7 @@ export default function Layout() {
             <MenuItem
               onClick={() => {
                 setAnchorEl(null);
+                setProfileDialogOpen(true);
               }}
             >
               Profile
@@ -55,11 +66,38 @@ export default function Layout() {
                 setAnchorEl(null);
               }}
             >
-              New Record
+              Sign Out
             </MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
+      {/* Profil info dialog */}
+      <Dialog
+        open={profileDialogOpen}
+        onClose={() => {
+          setProfileDialogOpen(false);
+        }}
+      >
+        <DialogTitle>Profile</DialogTitle>
+        <DialogContent dividers>
+          <Box display="flex" alignItems="center">
+            <Avatar />
+            <Box ml={3}>
+              <Typography>{currentUser?.displayName}</Typography>
+              <Typography>{currentUser?.email}</Typography>
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setProfileDialogOpen(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Outlet />
     </>
   );

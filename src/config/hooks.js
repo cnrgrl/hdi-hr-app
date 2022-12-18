@@ -13,3 +13,15 @@ export const useIsLoggedIn = () => {
 
   return isLoggedIn;
 };
+
+export const useCurrentUser = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+  }, []);
+
+  return user;
+};
