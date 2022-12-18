@@ -1,5 +1,6 @@
-import {Box, Button, TextField, Typography} from "@mui/material";
+import {Box, Button, TextField, Link, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
+import {Link as RouterLink} from "react-router-dom";
 import {
   changeName,
   changeEmail,
@@ -39,7 +40,7 @@ export default function SignUp() {
         Sign up
       </Typography>
       {error && (
-        <Typography variant="h5" sx={{textAlign: "center"}}>
+        <Typography color="error" variant="h5" sx={{textAlign: "center"}}>
           error
         </Typography>
       )}
@@ -90,7 +91,9 @@ export default function SignUp() {
           mt: 4,
         }}
       >
-        Already have an account? Sign in
+        <Link component={RouterLink} to="../sign-in">
+          Already have an account? Sign in
+        </Link>
       </Box>
     </form>
   );
