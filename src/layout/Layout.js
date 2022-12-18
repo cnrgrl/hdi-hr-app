@@ -9,6 +9,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  DialogContentText,
   Avatar,
   Box,
   DialogActions,
@@ -16,14 +17,19 @@ import {
 } from "@mui/material";
 import {useIsLoggedIn, useCurrentUser} from "../config/hooks";
 import {useState} from "react";
+import {useDispatch} from "react-redux";
+import {logOut} from "../redux/authSlice";
 import {User as UserIcon} from "feather-icons-react";
 
 export default function Layout() {
   const currentUser = useCurrentUser();
+  const dispatch = useDispatch();
 
   const isLoggedIn = useIsLoggedIn();
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const [confirmSignOutDialogOpen, setConfirmSignOutDialogOpen] =
+    useState(false);
 
   if (isLoggedIn === null) return <h1>Loading...</h1>;
   else if (isLoggedIn === false) return <Navigate replace to="/sign-in" />;
@@ -64,6 +70,7 @@ export default function Layout() {
             <MenuItem
               onClick={() => {
                 setAnchorEl(null);
+                setConfirmSignOutDialogOpen(true);
               }}
             >
               Sign Out
@@ -92,6 +99,36 @@ export default function Layout() {
           <Button
             onClick={() => {
               setProfileDialogOpen(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* Sign out confirmation alert */}
+      <Dialog
+        open={confirmSignOutDialogOpen}
+        onClose={() => {
+          setConfirmSignOutDialogOpen(false);
+        }}
+      >
+        <DialogContent>
+          <DialogContentText>
+            Sign out from "{currentUser?.email}"
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setConfirmSignOutDialogOpen(false);
+              dispatch(logOut());
+            }}
+          >
+            Sign out
+          </Button>
+          <Button
+            onClick={() => {
+              setConfirmSignOutDialogOpen(false);
             }}
           >
             Cancel
