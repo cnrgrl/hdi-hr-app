@@ -2,6 +2,7 @@ import * as React from "react";
 import {useState, useEffect} from "react";
 import axios from "axios";
 import Form from "../components/AddForm";
+import UpdateForm from "../components/UpdateForm";
 import {
   Box,
   Dialog,
@@ -24,6 +25,7 @@ export default function Home() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [employee, setEmployee] = useState([]);
   const [personData, setPersonData] = useState({});
+  const [updateFormOpen, setUpdateFormOpen] = useState(false);
 
   useEffect(() => {
     getEmployees();
@@ -43,6 +45,30 @@ export default function Home() {
       </DialogContent>
     </Dialog>
   );
+
+  const EditPersonForm = () => {
+    return (
+      <Dialog
+        open={updateFormOpen}
+        onClose={() => {
+          setUpdateFormOpen(false);
+        }}
+      >
+        <DialogContent sx={{paddingTop: 5}}>
+          <UpdateForm
+            personData={personData}
+            getNewData={() => {
+              setUpdateFormOpen(false);
+              getEmployees();
+              console.log("Method  Update running..");
+            }}
+            handleClose={() => setUpdateFormOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
+    );
+  };
+
   const getEmployees = async (data) => {
     axios
       .get("http://localhost:8383/employees", {crossdomain: true})
@@ -91,6 +117,7 @@ export default function Home() {
   return (
     <Container>
       {addFormOpen && <AddForm open={addFormOpen} />}
+      {updateFormOpen && <EditPersonForm open={addFormOpen} />}
       {deleteModalOpen && <DeleteDialog open={deleteModalOpen} />}
       <TableContainer component={Paper}>
         <Table sx={{minWidth: 650}} aria-label="simple table">
@@ -141,7 +168,8 @@ export default function Home() {
                       <Button
                         variant="outlined"
                         onClick={() => {
-                          console.log("edit");
+                          setPersonData(e);
+                          setUpdateFormOpen(true);
                         }}
                       >
                         edit
