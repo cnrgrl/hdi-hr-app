@@ -3,6 +3,8 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import {
   Box,
+  Dialog,
+  DialogContent,
   TableRow,
   TableHead,
   TableContainer,
@@ -12,12 +14,16 @@ import {
   Button,
   Container,
   Paper,
+  DialogActions,
+  DialogContentText,
 } from "@mui/material";
 import {logOut} from "../redux/authSlice";
 import {useDispatch} from "react-redux";
 
 export default function Home() {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [employee, setEmployee] = useState([]);
+  const [personData, setPersonData] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,12 +49,40 @@ export default function Home() {
       .catch((err) => console.log(err));
     getEmployees();
   };
-
+  const DeleteDialog = () => (
+    <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
+      <DialogContent sx={{paddingTop: 5}}>
+        <DialogContentText id="alert-dialog-slide-description">
+          Are you sure to delete the record?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => {
+            deleteEmployee(personData.id);
+            setDeleteModalOpen(false);
+          }}
+        >
+          Delete
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setDeleteModalOpen(false)}
+        >
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
   const handleLogOut = () => {
     dispatch(logOut());
   };
   return (
     <Container>
+      {deleteModalOpen && <DeleteDialog open={deleteModalOpen} />}
       <TableContainer component={Paper}>
         <Table sx={{minWidth: 650}} aria-label="simple table">
           <TableHead>
@@ -110,7 +144,8 @@ export default function Home() {
                         variant="contained"
                         color="error"
                         onClick={() => {
-                          deleteEmployee(e.id);
+                          setPersonData(e);
+                          setDeleteModalOpen(true);
                         }}
                       >
                         delete
