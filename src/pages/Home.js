@@ -1,4 +1,6 @@
 import * as React from "react";
+import {useState, useEffect} from "react";
+import axios from "axios";
 import {
   Box,
   TableRow,
@@ -15,7 +17,23 @@ import {logOut} from "../redux/authSlice";
 import {useDispatch} from "react-redux";
 
 export default function Home() {
+  const [employee, setEmployee] = useState([]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    getEmployees();
+    // eslint-disable-next-line
+  }, []);
+
+  const getEmployees = async (data) => {
+    axios
+      .get("http://localhost:8383/employees", {crossdomain: true})
+      .then((response) => {
+        setEmployee(response.data);
+      })
+      .catch((err) => console.log(err));
+    // reset();
+  };
 
   const handleLogOut = () => {
     dispatch(logOut());
@@ -53,43 +71,45 @@ export default function Home() {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow
-              hover
-              sx={{"&:last-child td, &:last-child th": {border: 0}}}
-            >
-              <TableCell component="th" scope="row">
-                id-1
-              </TableCell>
-              <TableCell align="right">Caner Ugurlu</TableCell>
-              <TableCell align="right">Ugurlu</TableCell>
-              <TableCell align="right">Caner</TableCell>
-              <TableCell align="right">CSS</TableCell>
-              <TableCell align="right">HTML</TableCell>
-              <TableCell align="right">SQL</TableCell>
-              <TableCell align="right">JS</TableCell>
-              <TableCell align="right">
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    console.log("edited");
-                  }}
-                >
-                  edit
-                </Button>
-              </TableCell>
+            {employee
+              ? employee?.map((e) => (
+                  <TableRow
+                    hover
+                    key={e.id}
+                    sx={{"&:last-child td, &:last-child th": {border: 0}}}
+                  >
+                    <TableCell align="right">{e?.User_Fullname}</TableCell>
+                    <TableCell align="right">{e?.User_Lastname}</TableCell>
+                    <TableCell align="right">{e?.User_Firstname}</TableCell>
+                    <TableCell align="right">{e?.Skill_1}</TableCell>
+                    <TableCell align="right">{e?.Skill_2}</TableCell>
+                    <TableCell align="right">{e?.Skill_3}</TableCell>
+                    <TableCell align="right">{e?.Skill_4}</TableCell>
+                    <TableCell align="right">
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          console.log("edit");
+                        }}
+                      >
+                        edit
+                      </Button>
+                    </TableCell>
 
-              <TableCell align="right">
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => {
-                    console.log("deleted");
-                  }}
-                >
-                  delete
-                </Button>
-              </TableCell>
-            </TableRow>
+                    <TableCell align="right">
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => {
+                          console.log("delete");
+                        }}
+                      >
+                        delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : undefined}
 
             <TableRow>
               <TableCell sx={{textAlign: "right"}} colSpan={10}>
