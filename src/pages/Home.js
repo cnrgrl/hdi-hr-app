@@ -46,7 +46,7 @@ export default function Home() {
                     variant="contained"
                     onClick={handleLogOut}
                   >
-                    sign out
+                    New Record
                   </Button>
                 </Box>
               </TableCell>

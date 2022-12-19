@@ -60,14 +60,11 @@ export default function SignIn() {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           alignItems: "center",
           mt: 4,
         }}
       >
-        <Link component={RouterLink} to="../forgot-password">
-          Forgot Password?
-        </Link>
         <Link component={RouterLink} to="../sign-up">
           Don't have an account? Sign up
         </Link>
