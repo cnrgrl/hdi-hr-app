@@ -35,6 +35,15 @@ export default function Home() {
     // reset();
   };
 
+  const deleteEmployee = async (id) => {
+    console.log(id);
+    axios
+      .post("http://localhost:8383/deleteemployee/" + id)
+      .then(() => console.log({status: "Delete successful"}))
+      .catch((err) => console.log(err));
+    getEmployees();
+  };
+
   const handleLogOut = () => {
     dispatch(logOut());
   };
@@ -101,7 +110,7 @@ export default function Home() {
                         variant="contained"
                         color="error"
                         onClick={() => {
-                          console.log("delete");
+                          deleteEmployee(e.id);
                         }}
                       >
                         delete
