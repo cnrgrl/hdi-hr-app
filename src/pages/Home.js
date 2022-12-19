@@ -1,6 +1,7 @@
 import * as React from "react";
 import {useState, useEffect} from "react";
 import axios from "axios";
+import Form from "../components/AddForm";
 import {
   Box,
   Dialog,
@@ -17,20 +18,31 @@ import {
   DialogActions,
   DialogContentText,
 } from "@mui/material";
-import {logOut} from "../redux/authSlice";
-import {useDispatch} from "react-redux";
 
 export default function Home() {
+  const [addFormOpen, setAddFormOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [employee, setEmployee] = useState([]);
   const [personData, setPersonData] = useState({});
-  const dispatch = useDispatch();
 
   useEffect(() => {
     getEmployees();
     // eslint-disable-next-line
   }, []);
 
+  const AddForm = () => (
+    <Dialog open={addFormOpen} onClose={() => setAddFormOpen(false)}>
+      <DialogContent sx={{paddingTop: 5}}>
+        <Form
+          getNewData={() => {
+            setAddFormOpen(false);
+            getEmployees();
+          }}
+          handleClose={() => setAddFormOpen(false)}
+        />
+      </DialogContent>
+    </Dialog>
+  );
   const getEmployees = async (data) => {
     axios
       .get("http://localhost:8383/employees", {crossdomain: true})
@@ -49,6 +61,7 @@ export default function Home() {
       .catch((err) => console.log(err));
     getEmployees();
   };
+
   const DeleteDialog = () => (
     <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
       <DialogContent sx={{paddingTop: 5}}>
@@ -60,10 +73,7 @@ export default function Home() {
         <Button
           variant="contained"
           color="error"
-          onClick={() => {
-            deleteEmployee(personData.id);
-            setDeleteModalOpen(false);
-          }}
+          onClick={() => deleteEmployee(personData.id)}
         >
           Delete
         </Button>
@@ -77,11 +87,10 @@ export default function Home() {
       </DialogActions>
     </Dialog>
   );
-  const handleLogOut = () => {
-    dispatch(logOut());
-  };
+
   return (
     <Container>
+      {addFormOpen && <AddForm open={addFormOpen} />}
       {deleteModalOpen && <DeleteDialog open={deleteModalOpen} />}
       <TableContainer component={Paper}>
         <Table sx={{minWidth: 650}} aria-label="simple table">
@@ -105,7 +114,7 @@ export default function Home() {
                     color="success"
                     fullWidth
                     variant="contained"
-                    onClick={handleLogOut}
+                    onClick={() => setAddFormOpen(true)}
                   >
                     New Record
                   </Button>
