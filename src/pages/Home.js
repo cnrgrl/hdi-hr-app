@@ -70,6 +70,7 @@ export default function Home() {
   };
 
   const getEmployees = async (data) => {
+    setDeleteModalOpen(false);
     axios
       .get("http://localhost:8383/employees", {crossdomain: true})
       .then((response) => {
@@ -127,7 +128,6 @@ export default function Home() {
                 "& > th": {fontSize: 14, fontWeight: 600},
               }}
             >
-              <TableCell>User_ID</TableCell>
               <TableCell>User_Fullname</TableCell>
               <TableCell align="right">User_Lastname</TableCell>
               <TableCell align="right">User_Firstname</TableCell>
@@ -139,11 +139,10 @@ export default function Home() {
                 <Box display="flex" justifyContent="flex-end">
                   <Button
                     color="success"
-                    fullWidth
                     variant="contained"
                     onClick={() => setAddFormOpen(true)}
                   >
-                    New Record
+                    Add a new Record
                   </Button>
                 </Box>
               </TableCell>
