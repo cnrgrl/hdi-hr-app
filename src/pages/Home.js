@@ -18,6 +18,7 @@ import {
   Paper,
   DialogActions,
   DialogContentText,
+  Typography,
 } from "@mui/material";
 
 export default function Home() {
@@ -81,7 +82,7 @@ export default function Home() {
   };
 
   const deleteEmployee = async (id) => {
-    console.log(id);
+    console.log(id, "deleted");
     axios
       .post("http://localhost:8383/deleteemployee/" + id)
       .then(() => console.log({status: "Delete successful"}))
@@ -192,8 +193,8 @@ export default function Home() {
               : undefined}
 
             <TableRow>
-              <TableCell sx={{textAlign: "right"}} colSpan={10}>
-                TOTAL
+              <TableCell sx={{textAlign: "right", paddingLeft: 5}} colSpan={10}>
+                <Typography variant="caption">{`TOTAL: ${employee.length}`}</Typography>
               </TableCell>
             </TableRow>
           </TableBody>
